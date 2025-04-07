@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 
+
 class Product extends Model
 {
     use HasFactory;
@@ -68,4 +69,10 @@ class Product extends Model
     {
         return $this->is_active ?? true;
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
 }

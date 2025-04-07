@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\SearchController; // Added the SearchController import
+use App\Http\Controllers\UserReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('profile.orders.show'); // Changed from 'orders.show'
+    });
+
+    // Reviews
+    Route::prefix('reviews')->name('reviews.')->group(function () {
+    Route::get('/product/{product}', [UserReviewController::class, 'index'])->name('index');
+    Route::get('/create/{product}', [UserReviewController::class, 'create'])->name('create');
+    Route::post('/store', [UserReviewController::class, 'store'])->name('store');
+    Route::get('/edit/{review}', [UserReviewController::class, 'edit'])->name('edit');
+    Route::put('/update/{review}', [UserReviewController::class, 'update'])->name('update');
+    Route::delete('/delete/{review}', [UserReviewController::class, 'destroy'])->name('destroy');
     });
 });
 

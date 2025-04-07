@@ -53,6 +53,7 @@
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Total</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,6 +63,27 @@
                             <td>${{ number_format($item->price, 2) }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>${{ number_format($item->price * $item->quantity, 2) }}</td>
+                            <td>
+                                @php
+                                    $review = App\Models\Review::where('user_id', Auth::id())
+                                                            ->where('product_id', $item->product_id)
+                                                            ->first();
+                                @endphp
+                                
+                                @if($review)
+                                    <a href="{{ route('reviews.edit', $review->id) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i> Edit Review
+                                    </a>
+                                @else
+                                    <a href="{{ route('reviews.create', $item->product_id) }}" class="btn btn-sm btn-success">
+                                        <i class="fas fa-star"></i> Write Review
+                                    </a>
+                                @endif
+                                
+                                <a href="{{ route('reviews.index', $item->product_id) }}" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i> View Reviews
+                                </a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -69,6 +91,7 @@
                         <tr>
                             <td colspan="3" class="text-end"><strong>Grand Total:</strong></td>
                             <td><strong>${{ number_format($order->total_price, 2) }}</strong></td>
+                            <td></td>
                         </tr>
                     </tfoot>
                 </table>

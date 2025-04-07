@@ -69,6 +69,29 @@
                         <h5 class="card-title">{{ $product->name }}</h5>
                         <p class="card-text text-muted">{{ $product->description ?? 'No description available' }}</p>
                         <h6 class="text-primary">${{ number_format($product->price, 2) }}</h6>
+
+                        @php
+                            $avgRating = $product->reviews ? $product->reviews->avg('rating') : 0;
+                            $reviewCount = $product->reviews ? $product->reviews->count() : 0;
+                        @endphp
+                        
+                        <div class="mb-2">
+                            <div class="d-flex align-items-center">
+                                <div class="stars me-2">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= $avgRating)
+                                            <i class="fas fa-star text-warning"></i>
+                                        @elseif($i <= $avgRating + 0.5)
+                                            <i class="fas fa-star-half-alt text-warning"></i>
+                                        @else
+                                            <i class="far fa-star text-warning"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <small class="text-muted">({{ $reviewCount }} {{ Str::plural('review', $reviewCount) }})</small>
+                            </div>
+                        </div>
+
                         <a href="{{ route('cart.add', $product->id) }}" class="btn btn-orange mt-3 mr-2 add-to-cart-btn" style="font-family: 'Roboto', sans-serif;">
                             Add to Cart
                         </a>
