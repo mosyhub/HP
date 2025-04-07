@@ -17,19 +17,30 @@ class OrderController extends Controller
         return view('admin.order.index', compact('orders'));
     }
 
-    public function updateStatus(Order $order, Request $request)
+    public function updateStatus(Request $request, Order $order)
     {
-        $validStatuses = ['pending', 'to_ship', 'to_deliver', 'completed'];
+        $validStatuses = ['pending', 'to_ship', 'to_deliver', 'completed', 'cancelled'];
         
         $request->validate([
             'status' => ['required', 'in:' . implode(',', $validStatuses)]
         ]);
         
-        try {
-            $order->update(['status' => $request->status]);
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        // Handle both AJAX and form submissions
+        if ($request->ajax()) {
+            try {
+                $order->update(['status' => $request->status]);
+                return response()->json(['success' => true]);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+            }
+        } else {
+            // Form submission
+            try {
+                $order->update(['status' => $request->status]);
+                return redirect()->back()->with('success', 'Order status updated successfully!');
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Failed to update order status: ' . $e->getMessage());
+            }
         }
     }
 }

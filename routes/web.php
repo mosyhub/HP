@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
         Route::post('/process-payment', [CartController::class, 'processPayment'])->name('cart.process-payment');
         Route::delete('/remove/{product_id}', [CartController::class, 'remove'])->name('cart.remove');
-        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('cart.orders.show'); // Changed the name to be prefixed with 'cart.'
     });
 
     // Order
@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [ProfileController::class, 'show'])->name('profile.show');
         Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('profile.orders.show'); // Changed from 'orders.show'
     });
 });
 
